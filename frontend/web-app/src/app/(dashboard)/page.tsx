@@ -1,56 +1,54 @@
 "use client";
-import { useState } from 'react';
-import Link from 'next/link';
+import { useContext, useEffect, Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/lib/AuthContext';
+
+function DashboardContent() {
+  const { role, isLoading, logout } = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && role === 'none') {
+      router.push('/login');
+    }
+  }, [isLoading, role, router]);
+
+  if (isLoading || role === 'none') {
+    return <div className="text-white text-center mt-20">Loading...</div>;
+  }
+
+  if (role === 'trainer') {
+    return <TrainerDashboard onLogout={logout} />;
+  }
+  return <CustomerDashboard onLogout={logout} />;
+}
 
 export default function AppRouter() {
-  const [role, setRole] = useState<'none' | 'customer' | 'trainer'>('none');
-
-  if (role === 'none') {
-    return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center animate-in fade-in duration-500">
-        <div className="glass-panel p-10 rounded-2xl max-w-md w-full text-center">
-          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple mb-8">
-            Login to GymSaaS
-          </h1>
-          <p className="text-zinc-400 mb-8">Select your role to access your personalized dashboard.</p>
-          
-          <div className="space-y-4">
-            <button 
-              onClick={() => setRole('customer')}
-              className="w-full bg-gradient-to-r from-brand-cyan to-brand-purple hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg text-lg"
-            >
-              Login as Customer
-            </button>
-            <button 
-              onClick={() => setRole('trainer')}
-              className="w-full bg-gradient-to-r from-brand-green to-brand-cyan hover:opacity-90 text-black font-bold py-4 px-6 rounded-xl transition-all shadow-lg text-lg"
-            >
-              Login as Trainer
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (role === 'customer') {
-    return <CustomerDashboard />;
-  }
-
-  return <TrainerDashboard />;
+  return (
+    <div className="p-8">
+      <Suspense fallback={<div className="text-white">Loading dashboard...</div>}>
+        <DashboardContent />
+      </Suspense>
+    </div>
+  );
 }
 
 // ----------------------------------------------------------------------
 // CUSTOMER DASHBOARD
 // ----------------------------------------------------------------------
-function CustomerDashboard() {
+function CustomerDashboard({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Welcome, <span className="text-gradient">John Doe</span></h1>
-        <button className="px-4 py-2 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-colors">
-          ⚙️ Settings
-        </button>
+        <h1 className="text-3xl font-bold">Welcome, <span className="text-gradient">Customer</span></h1>
+        <div className="flex gap-4">
+          <button className="px-4 py-2 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-colors">
+            ⚙️ Settings
+          </button>
+          <button onClick={onLogout} className="px-4 py-2 rounded-xl bg-red-500/10 text-red-500 font-medium hover:bg-red-500/20 transition-colors">
+            Logout
+          </button>
+        </div>
       </div>
 
       <div className="glass-panel p-6 rounded-2xl border border-brand-cyan/20 relative overflow-hidden">
@@ -104,7 +102,7 @@ function CustomerDashboard() {
 // ----------------------------------------------------------------------
 // TRAINER DASHBOARD
 // ----------------------------------------------------------------------
-function TrainerDashboard() {
+function TrainerDashboard({ onLogout }: { onLogout: () => void }) {
   const schedule = [
     { id: 1, time: '09:00 AM', title: 'Morning HIIT', type: 'Class', attendees: 12 },
     { id: 2, time: '11:30 AM', title: 'Personal Training', type: 'PT', client: 'John Doe' },
@@ -113,10 +111,15 @@ function TrainerDashboard() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Trainer, <span className="text-gradient">Mike</span></h1>
-        <button className="px-4 py-2 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-colors">
-          ⚙️ Settings
-        </button>
+        <h1 className="text-3xl font-bold">Trainer, <span className="text-gradient">Welcome</span></h1>
+        <div className="flex gap-4">
+          <button className="px-4 py-2 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-colors">
+            ⚙️ Settings
+          </button>
+          <button onClick={onLogout} className="px-4 py-2 rounded-xl bg-red-500/10 text-red-500 font-medium hover:bg-red-500/20 transition-colors">
+            Logout
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

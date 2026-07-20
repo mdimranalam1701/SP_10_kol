@@ -37,6 +37,7 @@
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
+}
 @theme {
   --font-sans: var(--font-outfit), var(--font-geist-sans);
   

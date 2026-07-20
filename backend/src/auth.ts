@@ -28,7 +28,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
 authRouter.post('/register', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password, firstName, lastName, role } = req.body;
+    const { email, password, firstName, lastName, role, gymName } = req.body;
     
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -43,9 +43,18 @@ authRouter.post('/register', async (req: Request, res: Response): Promise<void> 
         password: hashedPassword,
         firstName,
         lastName,
-        role: role || 'MEMBER'
+        role: role || 'CUSTOMER'
       }
     });
+
+    if (role === 'OWNER' && gymName) {
+      await prisma.gym.create({
+        data: {
+          name: gymName,
+          ownerId: user.id
+        }
+      });
+    }
 
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({ token, user: { id: user.id, email: user.email, role: user.role } });

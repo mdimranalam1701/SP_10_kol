@@ -14,7 +14,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     const [customers, total] = await Promise.all([
       prisma.user.findMany({
-        where: { role: 'MEMBER' },
+        where: { role: 'CUSTOMER' },
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
@@ -25,7 +25,7 @@ router.get('/', async (req: Request, res: Response) => {
           payments: true
         }
       }),
-      prisma.user.count({ where: { role: 'MEMBER' } })
+      prisma.user.count({ where: { role: 'CUSTOMER' } })
     ]);
 
     res.json({
@@ -62,7 +62,7 @@ router.post('/', async (req: Request, res: Response) => {
           email,
           phone,
           password: hashedPassword,
-          role: 'MEMBER',
+          role: 'CUSTOMER',
         }
       });
 
