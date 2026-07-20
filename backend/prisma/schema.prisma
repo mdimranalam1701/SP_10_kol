@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  OWNER
+  ADMIN
+  TRAINER
+  MEMBER
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  OVERDUE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role     @default(MEMBER)
+  phone     String?
+  profilePic String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gymsOwner   Gym[]        @relation("GymOwner")
+  memberships Membership[] @relation("UserMemberships")
+  payments    Payment[]
+  
+  branchId    String?
+  branch      Branch?      @relation(fields: [branchId], references: [id])
+}
+
+model Gym {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  owner       User     @relation("GymOwner", fields: [ownerId], references: [id])
+  branches    Branch[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Branch {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  gymId     String
+  gym       Gym      @relation(fields: [gymId], references: [id])
+  users     User[]
+  plans     Plan[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Plan {
+  id            String       @id @default(uuid())
+  name          String
+  description   String?
+  price         Float
+  durationDays  Int
+  branchId      String
+  branch        Branch       @relation(fields: [branchId], references: [id])
+  memberships   Membership[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Membership {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("UserMemberships", fields: [userId], references: [id])
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id])
+  startDate DateTime @default(now())
+  endDate   DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  payments  Payment[]
+}
+
+model Payment {
+  id           String        @id @default(uuid())
+  amount       Float
+  status       PaymentStatus @default(PENDING)
+  membershipId String
+  membership   Membership    @relation(fields: [membershipId], references: [id])
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
