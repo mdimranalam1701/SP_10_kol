@@ -34,49 +34,49 @@ export default function FinancePage() {
   if (loading) return <div>Loading financial data...</div>;
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Financial Overview</h1>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <h1 className="text-4xl font-extrabold mb-8 text-white">Financial <span className="text-gradient">Overview</span></h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader><CardTitle>Total Revenue</CardTitle></CardHeader>
-          <CardContent><p className="text-3xl font-bold text-green-600">${stats.totalRevenue.toLocaleString()}</p></CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <Card className="glass-panel border-0 hover:scale-[1.02] transition-transform duration-300">
+          <CardHeader className="pb-2"><CardTitle className="text-zinc-400 font-medium">Total Revenue</CardTitle></CardHeader>
+          <CardContent><p className="text-4xl font-bold text-brand-green">${stats.totalRevenue.toLocaleString()}</p></CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle>Pending Revenue</CardTitle></CardHeader>
-          <CardContent><p className="text-3xl font-bold text-yellow-600">${stats.totalPending.toLocaleString()}</p></CardContent>
+        <Card className="glass-panel border-0 hover:scale-[1.02] transition-transform duration-300">
+          <CardHeader className="pb-2"><CardTitle className="text-zinc-400 font-medium">Pending Revenue</CardTitle></CardHeader>
+          <CardContent><p className="text-4xl font-bold text-brand-cyan">${stats.totalPending.toLocaleString()}</p></CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle>Paid Members</CardTitle></CardHeader>
-          <CardContent><p className="text-3xl font-bold">{stats.paidMembersCount}</p></CardContent>
+        <Card className="glass-panel border-0 hover:scale-[1.02] transition-transform duration-300">
+          <CardHeader className="pb-2"><CardTitle className="text-zinc-400 font-medium">Paid Members</CardTitle></CardHeader>
+          <CardContent><p className="text-4xl font-bold text-white">{stats.paidMembersCount}</p></CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle>Unpaid Members</CardTitle></CardHeader>
-          <CardContent><p className="text-3xl font-bold text-red-500">{stats.pendingMembersCount}</p></CardContent>
+        <Card className="glass-panel border-0 hover:scale-[1.02] transition-transform duration-300">
+          <CardHeader className="pb-2"><CardTitle className="text-zinc-400 font-medium">Unpaid Members</CardTitle></CardHeader>
+          <CardContent><p className="text-4xl font-bold text-red-500">{stats.pendingMembersCount}</p></CardContent>
         </Card>
       </div>
 
-      <h2 className="text-2xl font-bold mb-4">Payment Ledger</h2>
-      <div className="bg-white rounded-md border shadow-sm">
+      <h2 className="text-2xl font-bold mb-6 text-white">Payment Ledger</h2>
+      <div className="glass-panel rounded-xl border border-white/10 overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Member</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Status</TableHead>
+          <TableHeader className="bg-white/5">
+            <TableRow className="border-white/10 hover:bg-white/5">
+              <TableHead className="text-zinc-300 font-medium">Member</TableHead>
+              <TableHead className="text-zinc-300 font-medium">Email</TableHead>
+              <TableHead className="text-zinc-300 font-medium">Amount</TableHead>
+              <TableHead className="text-zinc-300 font-medium">Date</TableHead>
+              <TableHead className="text-zinc-300 font-medium">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {payments.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell className="font-medium">{p.user.firstName} {p.user.lastName}</TableCell>
-                <TableCell>{p.user.email}</TableCell>
-                <TableCell>${p.amount.toFixed(2)}</TableCell>
-                <TableCell>{p.createdAt}</TableCell>
+              <TableRow key={p.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                <TableCell className="font-semibold text-white">{p.user.firstName} {p.user.lastName}</TableCell>
+                <TableCell className="text-zinc-400">{p.user.email}</TableCell>
+                <TableCell className="text-white font-medium">${p.amount.toFixed(2)}</TableCell>
+                <TableCell className="text-zinc-400">{p.createdAt}</TableCell>
                 <TableCell>
-                  <Badge variant={p.status === 'PAID' ? 'default' : p.status === 'PENDING' ? 'secondary' : 'destructive'}>
+                  <Badge className={p.status === 'PAID' ? 'bg-brand-green/20 text-brand-green border border-brand-green/30' : p.status === 'PENDING' ? 'bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}>
                     {p.status}
                   </Badge>
                 </TableCell>

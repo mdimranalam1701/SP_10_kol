@@ -1,65 +1,83 @@
-import Image from "next/image";
+"use client";
+import { useState } from 'react';
 
-export default function Home() {
+export default function TrainerDashboard() {
+  const [schedule] = useState([
+    { id: 1, time: '09:00 AM', title: 'Morning HIIT', type: 'Class', attendees: 12 },
+    { id: 2, time: '11:30 AM', title: 'Personal Training', type: 'PT', attendees: 1, client: 'John Doe' },
+    { id: 3, time: '02:00 PM', title: 'Personal Training', type: 'PT', attendees: 1, client: 'Sarah Connor' },
+    { id: 4, time: '05:00 PM', title: 'Core Crusher', type: 'Class', attendees: 18 },
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex justify-between items-end mb-10">
+        <div>
+          <h1 className="text-4xl font-extrabold text-white mb-2">Today's <span className="text-gradient">Schedule</span></h1>
+          <p className="text-zinc-400 text-lg">Thursday, July 20, 2026</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <button className="bg-gradient-to-r from-brand-green to-brand-cyan hover:opacity-90 text-black font-bold py-3 px-6 rounded-xl transition-all shadow-lg">
+          + Book Session
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Col: Roster */}
+        <div className="lg:col-span-2 space-y-4">
+          {schedule.map(session => (
+            <div key={session.id} className="glass-panel rounded-2xl p-6 flex items-center gap-6 hover:scale-[1.01] transition-transform duration-300 border border-white/5">
+              <div className="text-center min-w-[100px]">
+                <p className="text-2xl font-bold text-white">{session.time.split(' ')[0]}</p>
+                <p className="text-brand-green font-semibold">{session.time.split(' ')[1]}</p>
+              </div>
+              <div className="w-px h-12 bg-white/10"></div>
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 className="text-xl font-bold text-white">{session.title}</h3>
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${session.type === 'Class' ? 'bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30' : 'bg-brand-purple/20 text-brand-purple border border-brand-purple/30'}`}>
+                    {session.type}
+                  </span>
+                </div>
+                <p className="text-zinc-400">
+                  {session.type === 'Class' ? `${session.attendees} Attendees Registered` : `Client: ${session.client}`}
+                </p>
+              </div>
+              <button className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/10 text-white font-medium">
+                View Details
+              </button>
+            </div>
+          ))}
         </div>
-      </main>
+
+        {/* Right Col: Stats */}
+        <div className="space-y-6">
+          <div className="glass-panel rounded-2xl p-8 border border-white/5 text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-green to-brand-cyan"></div>
+            <h3 className="text-zinc-400 font-medium mb-2">Total Classes Today</h3>
+            <p className="text-6xl font-extrabold text-white">2</p>
+          </div>
+          
+          <div className="glass-panel rounded-2xl p-8 border border-white/5 text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-cyan to-brand-purple"></div>
+            <h3 className="text-zinc-400 font-medium mb-2">PT Sessions Today</h3>
+            <p className="text-6xl font-extrabold text-white">2</p>
+          </div>
+
+          <div className="glass-panel rounded-2xl p-6 border border-white/5">
+            <h3 className="text-white font-bold text-lg mb-4">Quick Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-zinc-300 font-medium">
+                ⏱ Log Working Hours
+              </button>
+              <button className="w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-zinc-300 font-medium">
+                📝 Review Client Goals
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
