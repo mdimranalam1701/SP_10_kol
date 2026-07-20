@@ -72,9 +72,19 @@ npm run dev
 **Unified Mobile App (Expo / React Native):**
 ```bash
 cd frontend/mobile-app
+
+# 1. To preview directly in your Web Browser (Fastest):
+npm run web
+
+# 2. To run on an Android Emulator or via Expo Go:
 npm start
-# Opens the Expo Metro Bundler. 
-# You can press 'a' to open on an Android Emulator, or scan the QR code with the Expo Go app on your Android device.
+# Then press 'a' to open on an Android Emulator, or scan the QR code with the Expo Go app.
+
+# 3. How to Build the Android APK
+# Since this project focuses on Android, you can build the standalone APK using Expo Application Services (EAS):
+npm install -g eas-cli
+eas build -p android --profile preview
+# This will generate a downloadable .apk file you can install directly on your Android phone!
 ```
 
 **Backend API:**
