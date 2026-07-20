@@ -13,7 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 import { authRouter } from './auth';
+import customersRouter from './routes/customers';
 app.use('/auth', authRouter);
+app.use('/api/customers', customersRouter);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

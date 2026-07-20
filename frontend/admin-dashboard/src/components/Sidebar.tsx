@@ -7,7 +7,7 @@ export function Sidebar() {
       <h2 className="text-2xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-brand-cyan">GymSaaS Admin</h2>
       <nav className="flex flex-col gap-2">
         <Link href="/" className="hover:bg-white/10 hover:translate-x-1 transition-all duration-300 p-3 rounded-xl text-zinc-300 hover:text-white font-medium">Dashboard</Link>
-        <Link href="/members" className="hover:bg-white/10 hover:translate-x-1 transition-all duration-300 p-3 rounded-xl text-zinc-300 hover:text-white font-medium">Members</Link>
+        <Link href="/customers" className="hover:bg-white/10 hover:translate-x-1 transition-all duration-300 p-3 rounded-xl text-zinc-300 hover:text-white font-medium">Customers</Link>
         <Link href="/finance" className="hover:bg-white/10 hover:translate-x-1 transition-all duration-300 p-3 rounded-xl text-zinc-300 hover:text-white font-medium">Finance</Link>
         <Link href="/plans" className="hover:bg-white/10 hover:translate-x-1 transition-all duration-300 p-3 rounded-xl text-zinc-300 hover:text-white font-medium">Subscription Plans</Link>
         <Link href="/trainers" className="hover:bg-white/10 hover:translate-x-1 transition-all duration-300 p-3 rounded-xl text-zinc-300 hover:text-white font-medium">Trainers</Link>
